@@ -1,0 +1,72 @@
+project(
+    'pyrodb',
+    'cpp',
+    default_options:[
+        'cpp_std=c++17',
+        'warning_level=3',
+        'b_lundef=false',
+        'b_sanitize=address,undefined'
+    ],
+    license: 'MIT',
+    version: '0.0.1',
+)
+
+#folly = dependency('folly', required: true)
+gflags = dependency('gflags', required : true)
+gtest = dependency('gtest', required : true)
+gmock = dependency('gmock', required : true)
+benchmark = dependency('benchmark', required: true)
+threads = dependency('threads')
+
+incdirs = include_directories('include')
+# follydirs = include_directories('/usr/local/opt/folly/include')
+install_subdir('include/pyrodb', install_dir : get_option('includedir'))
+
+lib = library(
+    'pyrodb',
+    [
+        'src/container/memory/bloom_filer.cpp',
+        'src/container/memory/memtable.cpp',
+        'src/storage/sstable.cpp',
+        'src/db/db.cpp',
+        'src/level/level.cpp',
+        'src/run/run.cpp'
+    ],
+    dependencies: [threads],
+    include_directories : [incdirs],
+    # install : true,
+)
+
+if gtest.found() and gmock.found()
+    test = executable(
+        'pyrodb-test',
+        [
+            'test/main.cpp',
+            'test/run/run_test.cpp',
+            'test/db/db_test.cpp'
+        ],
+        dependencies : [gtest, gmock],
+        include_directories : [incdirs],
+        link_with : lib,
+    )
+
+    test('test', test)
+endif
+
+if benchmark.found()
+   bench = executable(
+        'pyrodb-bench',
+        [
+            'bench/main.cpp',
+            'bench/memory.cpp',
+        ],
+        dependencies : [threads, benchmark],
+        include_directories : [incdirs],
+        link_with : lib,
+    )
+
+    benchmark('bench', bench)
+endif
+
+run_target('format', command : 'scripts/clang-format.sh')
+
