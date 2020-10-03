@@ -65,14 +65,20 @@ target_compile_options(core PRIVATE
 
 
 # build tests (targets: gtest_main, gtest)
+set(BUILD_GMOCK OFF)
+set(INSTALL_GTEST OFF)
 enable_testing()
 add_subdirectory(vendor/google/googletest)
 add_subdirectory(test)
 
 # build google benchmark (target: benchmark)
 # do not build tests of benchmarking lib
+set(BENCHMARK_ENABLE_INSTALL OFF)
 set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Suppressing benchmark's tests" FORCE)
 add_subdirectory(vendor/google/benchmark)
+
+include_directories("vendor/google/googletest/include"
+                    "vendor/google/benchmark/include")
 
 # benches
 add_executable(pyrodb-benchmark 

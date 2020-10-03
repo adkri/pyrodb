@@ -1,7 +1,7 @@
 .idea/
 .clangd/
 .vscode/
-db/
+./db-data/
 build/
 compile_commands.json
 cmake-build-*/

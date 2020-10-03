@@ -52,7 +52,7 @@ static auto createPathIfNotExists(std::string path) -> void {
 }
 
 static auto findLevels(std::vector<std::string>& paths) -> void {
-  for (const auto& entry : std::filesystem::directory_iterator("./db/")) {
+  for (const auto& entry : std::filesystem::directory_iterator("./db-data/")) {
     if (entry.is_directory()) {
       auto dirpath = std::string(entry.path());
       if (dirpath.rfind("level", 0) == 0) {
