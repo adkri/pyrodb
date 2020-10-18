@@ -6,10 +6,6 @@ namespace pyrodb {
 constexpr int MAX_RUNS = 10;
 
 class Level {
-  uint32_t num_;
-  uint32_t num_runs;
-  std::vector<std::shared_ptr<Run>> runs_;
-
  public:
   auto MergeLevel(std::vector<Level>::iterator current) -> void;
   auto Add(std::shared_ptr<Run> run, std::vector<Level>::iterator current,
@@ -30,6 +26,11 @@ class Level {
     }
     current->runs_.push_back(std::move(run));
   }
+
+ private:
+  uint32_t runs_num_;
+  uint32_t runs_size_;
+  std::vector<std::shared_ptr<Run>> runs_;
 };
 
 }  // namespace pyrodb

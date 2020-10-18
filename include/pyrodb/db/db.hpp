@@ -4,6 +4,8 @@
 #include "pyrodb/level/level.hpp"
 
 namespace pyrodb {
+constexpr int LEVELS_DEPTH = 10;
+constexpr int MAX_RUNS = 10;
 
 class Db {
  public:

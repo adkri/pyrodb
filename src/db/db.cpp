@@ -9,6 +9,14 @@ namespace pyrodb {
 
 Db::Db() {
   memtable_ = std::make_unique<Memtable>();
+
+  // make levels
+  int depth = LEVELS_DEPTH;
+  int runs_size_level = 2 * 10 * (1024 ^ 2);  // 20mB
+  while (depth-- > 0) {
+    levels_.emplace_back(MAX_RUNS, runs_size_level);
+    runs_size_level *= MAX_RUNS;
+  }
 }
 
 auto Db::Put(const std::string& key, const std::string& value) -> void {
